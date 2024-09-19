@@ -1,5 +1,9 @@
 let listaNombreGastos = [];
 let listaValorGastos = [];
+let btnAgregar = document.getElementById("btnAgregar");
+let btnCancelar = document.getElementById("btnCancelar");
+
+interruptorBoton("cancelar", true);
 
 function agregarGasto() {
     let nombreGasto = document.getElementById("nombreGasto").value;
@@ -26,7 +30,7 @@ function mostrarListaGastos() {
         gastosLi += 
             `<li>
                 ${elemento} - USD$ ${valorGasto.toFixed(2)}
-                <button onclick="alert("Aun no funciona")";>Editar</button>
+                <button onclick="editarGastoSeleccionado(${posicion})";>Editar</button>
                 <button onclick="eliminarGasto(${posicion})";>Eliminar</button>
             </li>`;
         totalGastos += valorGasto;
@@ -38,14 +42,57 @@ function mostrarListaGastos() {
     limpiarCampos();
 }
 
+function editarGastoSeleccionado(index) {
+    //cargar los inputs con los datos que se deben editar
+    const divBotones = document.getElementById("botones");
+    document.getElementById("nombreGasto").value = listaNombreGastos[index];
+    document.getElementById("valorGasto").value = listaValorGastos[index];
+    //configurar los botones para editar
+    interruptorBoton("agregar", true)
+    interruptorBoton("cancelar", false)
+    //crear boton editar 
+    let btnEditar = `<button id="btnEditar" onclick="editar(${index});">Editar</button>`;
+    divBotones.innerHTML = btnEditar;
+}
+function editar(posicion) {
+    let nombreGasto = document.getElementById("nombreGasto").value;
+    let valorGasto = document.getElementById("valorGasto").value;
+
+    listaNombreGastos[posicion] = nombreGasto;
+    listaValorGastos[posicion] = valorGasto;
+
+    mostrarListaGastos();
+    cancelar();
+}
+
+function eliminarGasto(posicion) {
+    listaNombreGastos.splice(posicion, 1);
+    listaValorGastos.splice(posicion,1);
+    mostrarListaGastos();
+}
 function limpiarCampos() {
     document.getElementById("nombreGasto").value = '';
     document.getElementById("valorGasto").value = '';
 }
 
-function eliminarGasto(posicion) {
-    console.log(posicion);
-    listaNombreGastos.splice(posicion, 1);
-    listaValorGastos.splice(posicion,1);
-    mostrarListaGastos();
+function interruptorBoton(boton, estado) {
+    switch (boton) {
+        case "agregar":
+            btnAgregar.hidden = estado;
+            break;
+        case "editar":
+            btnEditar.hidden = estado;
+        break;
+        case "cancelar":
+            btnCancelar.hidden = estado;
+        break;
+        default:
+            break;
+    }
+}
+function cancelar() {
+    limpiarCampos();
+    interruptorBoton("agregar", false);
+    interruptorBoton("editar", true);
+    interruptorBoton("cancelar", true);
 }
