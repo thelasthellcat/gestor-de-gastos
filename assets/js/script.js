@@ -1,16 +1,16 @@
 let listaNombreGastos = [];
+let listaDescripcionGastos = [];
 let listaValorGastos = [];
 let btnAgregar = document.getElementById("btnAgregar");
 let btnCancelar = document.getElementById("btnCancelar");
 
-interruptorBoton("cancelar", true);
-
 function agregarGasto() {
     let nombreGasto = document.getElementById("nombreGasto").value;
+    let descripcionGasto = document.getElementById("txtDescripcion").value;
     let valorGasto = document.getElementById("valorGasto").value;
-    // let descripcionGasto;
 
     listaNombreGastos.push(nombreGasto);
+    listaDescripcionGastos.push(descripcionGasto);
     listaValorGastos.push(valorGasto);
     
     // console.log(listaNombreGastos);
@@ -27,11 +27,14 @@ function mostrarListaGastos() {
     let gastosLi = "";
     listaNombreGastos.forEach( (elemento, posicion) => {
         const valorGasto = Number(listaValorGastos[posicion]);
+        const descGasto = listaDescripcionGastos[posicion];
         gastosLi += 
             `<li>
-                ${elemento} - USD$ ${valorGasto.toFixed(2)}
-                <button onclick="editarGastoSeleccionado(${posicion})";>Editar</button>
-                <button onclick="eliminarGasto(${posicion})";>Eliminar</button>
+                ${elemento} - USD$ ${valorGasto.toFixed(2)} -> ${descGasto}
+                <div id="opcionesGastos">
+                    <button onclick="editarGastoSeleccionado(${posicion})";>Editar</button>
+                    <button onclick="eliminarGasto(${posicion})";>Eliminar</button>
+                </div>
             </li>`;
         totalGastos += valorGasto;
     });
@@ -46,23 +49,28 @@ function editarGastoSeleccionado(index) {
     //cargar los inputs con los datos que se deben editar
     const divBotones = document.getElementById("botones");
     document.getElementById("nombreGasto").value = listaNombreGastos[index];
+    document.getElementById("txtDescripcion").value = listaDescripcionGastos[index];
     document.getElementById("valorGasto").value = listaValorGastos[index];
-    //configurar los botones para editar
-    interruptorBoton("agregar", true)
-    interruptorBoton("cancelar", false)
     //crear boton editar 
-    let btnEditar = `<button id="btnEditar" onclick="editar(${index});">Editar</button>`;
-    divBotones.innerHTML = btnEditar;
+    let btnEditar = `<button class="btnEditar" onclick="editar(${index});">Editar</button>`;
+    divBotones.innerHTML += btnEditar;
+    //configurar los botones para editar
+    interruptorBoton("btnAgregar", true);
 }
 function editar(posicion) {
     let nombreGasto = document.getElementById("nombreGasto").value;
+    let descripcionGasto = document.getElementById("txtDescripcion").value;
     let valorGasto = document.getElementById("valorGasto").value;
-
+    let elementoEliminar = document.getElementsByClassName("btnEditar");
     listaNombreGastos[posicion] = nombreGasto;
+    listaDescripcionGastos[posicion] = descripcionGasto;
     listaValorGastos[posicion] = valorGasto;
+    
 
+    interruptorBoton("btnAgregar");
+    Array.from(elementoEliminar).forEach(elemento => elemento.remove()) //eliminar el boton editar
     mostrarListaGastos();
-    cancelar();
+
 }
 
 function eliminarGasto(posicion) {
@@ -72,27 +80,14 @@ function eliminarGasto(posicion) {
 }
 function limpiarCampos() {
     document.getElementById("nombreGasto").value = '';
+    document.getElementById("txtDescripcion").value = "";
     document.getElementById("valorGasto").value = '';
 }
 
-function interruptorBoton(boton, estado) {
-    switch (boton) {
-        case "agregar":
-            btnAgregar.hidden = estado;
-            break;
-        case "editar":
-            btnEditar.hidden = estado;
-        break;
-        case "cancelar":
-            btnCancelar.hidden = estado;
-        break;
-        default:
-            break;
-    }
+function interruptorBoton(boton, estado=false) {
+    document.getElementById(boton).hidden = estado;
 }
 function cancelar() {
     limpiarCampos();
-    interruptorBoton("agregar", false);
-    interruptorBoton("editar", true);
-    interruptorBoton("cancelar", true);
+    interruptorBoton("btnAgregar", false    )
 }
