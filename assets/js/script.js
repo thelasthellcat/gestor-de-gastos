@@ -46,31 +46,46 @@ function mostrarListaGastos() {
 }
 
 function editarGastoSeleccionado(index) {
+    //ocultar el boton agregar
+    document.getElementById("btnAgregar").hidden = true;
+
+    let divBotones = document.getElementById("botones");
+    let btnCancelar = document.getElementById("btnCancelar");
+    let listaElementos = divBotones.childNodes;
+   
     //cargar los inputs con los datos que se deben editar
-    const divBotones = document.getElementById("botones");
     document.getElementById("nombreGasto").value = listaNombreGastos[index];
     document.getElementById("txtDescripcion").value = listaDescripcionGastos[index];
     document.getElementById("valorGasto").value = listaValorGastos[index];
+    
     //crear boton editar 
-    let btnEditar = `<button class="btnEditar" onclick="editar(${index});">Editar</button>`;
-    divBotones.innerHTML += btnEditar;
-    //configurar los botones para editar
-    interruptorBoton("btnAgregar", true);
+    if (!divBotones.querySelector('.btnEditar')) {
+        console.log(!!divBotones.querySelector('.btnEditar'));
+        let buttonEditar = document.createElement("button");
+        buttonEditar.textContent = "Editar";
+        buttonEditar.classList.add("btnEditar");
+        buttonEditar.onclick = () => editar(index);
+        
+        divBotones.insertBefore(buttonEditar,btnCancelar); 
+    }
+    
 }
 function editar(posicion) {
+    //mostrar el boton agregar
+    document.getElementById("btnAgregar").hidden = false;
+
     let nombreGasto = document.getElementById("nombreGasto").value;
     let descripcionGasto = document.getElementById("txtDescripcion").value;
     let valorGasto = document.getElementById("valorGasto").value;
     let elementoEliminar = document.getElementsByClassName("btnEditar");
+
     listaNombreGastos[posicion] = nombreGasto;
     listaDescripcionGastos[posicion] = descripcionGasto;
     listaValorGastos[posicion] = valorGasto;
     
-
-    interruptorBoton("btnAgregar");
-    Array.from(elementoEliminar).forEach(elemento => elemento.remove()) //eliminar el boton editar
-    mostrarListaGastos();
-
+    // eliminar el boton editar 
+    elementoEliminar ? Array.from(elementoEliminar).forEach(elemento => elemento.remove()) : alert("No se elimino el btnEditar");
+    mostrarListaGastos();        
 }
 
 function eliminarGasto(posicion) {
@@ -85,9 +100,16 @@ function limpiarCampos() {
 }
 
 function interruptorBoton(boton, estado=false) {
-    document.getElementById(boton).hidden = estado;
+    document.getElementById(boton).hidden = (estado == true) ? true : console.log(estado);
 }
 function cancelar() {
+    let botones = document.getElementById("botones");
     limpiarCampos();
-    interruptorBoton("btnAgregar", false    )
+    if (botones.querySelector(".btnEditar")) {
+        let btnEditar = document.getElementsByClassName("btnEditar");
+        // eliminar el boton editar 
+        btnEditar ? Array.from(btnEditar).forEach(elemento => elemento.remove()) : alert("No se elimino el btnEditar");
+        //mostrar el boton agregar
+        document.getElementById("btnAgregar").hidden = false;
+    }
 }
