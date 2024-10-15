@@ -9,15 +9,17 @@ function agregarGasto() {
     let descripcionGasto = document.getElementById("txtDescripcion").value;
     let valorGasto = document.getElementById("valorGasto").value;
 
-    listaNombreGastos.push(nombreGasto);
-    listaDescripcionGastos.push(descripcionGasto);
-    listaValorGastos.push(valorGasto);
-    
-    // console.log(listaNombreGastos);
-    // console.log(listaValorGastos);
+    let validacion  = validarDatosIngresados([nombreGasto,descripcionGasto, valorGasto]);
+    console.log(validacion);
 
-    mostrarListaGastos();
-    
+    if (validacion) {
+        listaNombreGastos.push(nombreGasto);
+        listaDescripcionGastos.push(descripcionGasto);
+        listaValorGastos.push(valorGasto);
+        mostrarListaGastos();        
+    }else{
+        console.log("Ingrese datos en todos los campos para agregar un nuevo gasto");
+    }
 }
 
 function mostrarListaGastos() {
@@ -79,13 +81,21 @@ function editar(posicion) {
     let valorGasto = document.getElementById("valorGasto").value;
     let elementoEliminar = document.getElementsByClassName("btnEditar");
 
-    listaNombreGastos[posicion] = nombreGasto;
-    listaDescripcionGastos[posicion] = descripcionGasto;
-    listaValorGastos[posicion] = valorGasto;
-    
-    // eliminar el boton editar 
-    elementoEliminar ? Array.from(elementoEliminar).forEach(elemento => elemento.remove()) : alert("No se elimino el btnEditar");
-    mostrarListaGastos();        
+    let validacion  = validarDatosIngresados([nombreGasto,descripcionGasto, valorGasto]);
+    console.log(validacion);
+
+    if (validacion) {
+        listaNombreGastos[posicion] = nombreGasto;
+        listaDescripcionGastos[posicion] = descripcionGasto;
+        listaValorGastos[posicion] = valorGasto;
+        
+        // eliminar el boton editar 
+        elementoEliminar ? Array.from(elementoEliminar).forEach(elemento => elemento.remove()) : alert("No se elimino el btnEditar");
+        mostrarListaGastos();
+    }else{
+        document.getElementById("btnAgregar").hidden = true;
+        console.log("Ingrese datos en todos los campos para editar un nuevo gasto");
+    }        
 }
 
 function eliminarGasto(posicion) {
@@ -112,4 +122,18 @@ function cancelar() {
         //mostrar el boton agregar
         document.getElementById("btnAgregar").hidden = false;
     }
+}
+
+//retorna true si los datos son validos
+function validarDatosIngresados(datos=[]) {
+    let camposVacios = 0;
+    for (const key in datos) {
+        if (datos[key] == "") {
+            camposVacios++;
+        }
+    }
+    if (camposVacios==0) {
+        return true;
+    }
+    return false;
 }
