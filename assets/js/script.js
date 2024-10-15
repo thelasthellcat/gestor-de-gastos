@@ -34,7 +34,7 @@ function mostrarListaGastos() {
             `<li>
                 ${elemento} - USD$ ${valorGasto.toFixed(2)} -> ${descGasto}
                 <div id="opcionesGastos">
-                    <button onclick="editarGastoSeleccionado(${posicion})";>Editar</button>
+                    <button onclick="seleccionarGastoEditar(${posicion})";>Editar</button>
                     <button onclick="eliminarGasto(${posicion})";>Eliminar</button>
                 </div>
             </li>`;
@@ -47,7 +47,7 @@ function mostrarListaGastos() {
     limpiarCampos();
 }
 
-function editarGastoSeleccionado(index) {
+function seleccionarGastoEditar(index) {
     //ocultar el boton agregar
     document.getElementById("btnAgregar").hidden = true;
 
@@ -66,13 +66,12 @@ function editarGastoSeleccionado(index) {
         let buttonEditar = document.createElement("button");
         buttonEditar.textContent = "Editar";
         buttonEditar.classList.add("btnEditar");
-        buttonEditar.onclick = () => editar(index);
+        buttonEditar.onclick = () => editarGasto(index);
         
         divBotones.insertBefore(buttonEditar,btnCancelar); 
     }
-    
 }
-function editar(posicion) {
+function editarGasto(posicion) {
     //mostrar el boton agregar
     document.getElementById("btnAgregar").hidden = false;
 
@@ -82,7 +81,6 @@ function editar(posicion) {
     let elementoEliminar = document.getElementsByClassName("btnEditar");
 
     let validacion  = validarDatosIngresados([nombreGasto,descripcionGasto, valorGasto]);
-    console.log(validacion);
 
     if (validacion) {
         listaNombreGastos[posicion] = nombreGasto;
@@ -109,9 +107,6 @@ function limpiarCampos() {
     document.getElementById("valorGasto").value = '';
 }
 
-function interruptorBoton(boton, estado=false) {
-    document.getElementById(boton).hidden = (estado == true) ? true : console.log(estado);
-}
 function cancelar() {
     let botones = document.getElementById("botones");
     limpiarCampos();
