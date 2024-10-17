@@ -25,7 +25,8 @@ textarea {
 }
 
 button {
-    padding: 10px 40px;
+    padding: 10px 20px;
+    margin: 4px;
     width: fit-content;
     background-color: #1875E8;
     color: #fff;
@@ -36,9 +37,20 @@ button {
     transition: background-color 0.3s;
 }
 
+button.btn-editar{
+    padding: 5px 10px;
+    font-size: 1rem;
+    margin: 4px;
+}
+
+.opcionesGastos{
+    background: yellowgreen;
+}
+
 #opcionesGastos{
     display: flex;
     flex-direction: row;
+    padding-top: 0;
 }
 
 button:hover {
@@ -54,12 +66,16 @@ ul {
     width: 100%;
 }
 
+li div {
+    align-content: center;
+}
+
 ul li {
-    padding: 10px;
+    padding: 5px 10px;
     background-color: #041832;
     border-bottom: 1px solid #eee;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
 ul li:last-child {

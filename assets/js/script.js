@@ -26,16 +26,25 @@ function mostrarListaGastos() {
     const listadoGastosUl = document.getElementById("listaDeGastos");
     const totalMensualSpan = document.getElementById("totalGastos");
     let totalGastos = 0;
-    let gastosLi = "";
+    let gastosLi = 
+        `<li>
+            <div>Nombre</div>
+            <div>Valor($)</div>
+            <div>Descripción</div>
+            <div>Opciones</div>
+        </li>`;
+
     listaNombreGastos.forEach( (elemento, posicion) => {
         const valorGasto = Number(listaValorGastos[posicion]);
         const descGasto = listaDescripcionGastos[posicion];
         gastosLi += 
             `<li>
-                ${elemento} - USD$ ${valorGasto.toFixed(2)} -> ${descGasto}
+                <div>${elemento}</div>
+                <div>USD$ ${valorGasto.toFixed(2)}</div>
+                <div>${descGasto}</div>
                 <div id="opcionesGastos">
-                    <button onclick="seleccionarGastoEditar(${posicion})";>Editar</button>
-                    <button onclick="eliminarGasto(${posicion})";>Eliminar</button>
+                    <button class="btn-editar" onclick="seleccionarGastoEditar(${posicion})";>Editar</button>
+                    <button class="btn-editar" onclick="eliminarGasto(${posicion})";>Eliminar</button>
                 </div>
             </li>`;
         totalGastos += valorGasto;
@@ -51,9 +60,8 @@ function seleccionarGastoEditar(index) {
     //ocultar el boton agregar
     document.getElementById("btnAgregar").hidden = true;
 
-    let divBotones = document.getElementById("botones");
+    let divBotones = document.getElementById("opcionesGastos");
     let btnCancelar = document.getElementById("btnCancelar");
-    let listaElementos = divBotones.childNodes;
    
     //cargar los inputs con los datos que se deben editar
     document.getElementById("nombreGasto").value = listaNombreGastos[index];
